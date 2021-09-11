@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<robot name="continuum_robot">
+<link name="base_link"/>
+<material name="white">
+<color rgba="0 1 0 1"/>
+</material>
+
+<link name="link0">
+<visual>
+<geometry>
+<box size="1 1 0.5"/>
+<origin rpy="0 0 0" xyz="0 0 0"/>
+</geometry>
+<material name="white"/>
+</visual>
+</link>
+
+<joint name="joint0" type="floating">
+<parent link="base_link"/>
+<child link="link0"/>
+</joint>
+
+<link name="link1">
+<visual>
+<geometry>
+<cylinder length="0.1" radius="0.3"/>
+<origin rpy="0 0 0" xyz="0 0 0"/>
+</geometry>
+</visual>
+</link>
+
+<joint name="joint1" type="floating">
+<parent link="base_link"/>
+<child link="link1"/>
+</joint>
+
+<link name="link2">
+<visual>
+<geometry>
+<cylinder length="0.1" radius="0.3"/>
+<origin rpy="0 0 0" xyz="0 0 0"/>
+</geometry>
+</visual>
+</link>
+
+<joint name="joint2" type="floating">
+<parent link="base_link"/>
+<child link="link2"/>
+</joint>
+
+<link name="link3">
+<visual>
+<geometry>
+<cylinder length="0.1" radius="0.3"/>
+<origin rpy="0 0 0" xyz="0 0 0"/>
+</geometry>
+</visual>
+</link>
+
+<joint name="joint3" type="floating">
+<parent link="base_link"/>
+<child link="link3"/>
+</joint>
+
+<link name="link4">
+<visual>
+<geometry>
+<cylinder length="0.1" radius="0.3"/>
+<origin rpy="0 0 0" xyz="0 0 0"/>
+</geometry>
+</visual>
+</link>
+
+<joint name="joint4" type="floating">
+<parent link="base_link"/>
+<child link="link4"/>
+</joint>
+
+<link name="link5">
+<visual>
+<geometry>
+<cylinder length="0.1" radius="0.3"/>
+<origin rpy="0 0 0" xyz="0 0 0"/>
+</geometry>
+</visual>
+</link>
+
+<joint name="joint5" type="floating">
+<parent link="base_link"/>
+<child link="link5"/>
+</joint>
+
+<link name="link6">
+<visual>
+<geometry>
+<cylinder length="0.1" radius="0.3"/>
+<origin rpy="0 0 0" xyz="0 0 0"/>
+</geometry>
+</visual>
+</link>
+
+<joint name="joint6" type="floating">
+<parent link="base_link"/>
+<child link="link6"/>
+</joint>
+
+<link name="link7">
+<visual>
+<geometry>
+<cylinder length="0.1" radius="0.3"/>
+<origin rpy="0 0 0" xyz="0 0 4"/>
+</geometry>
+</visual>
+</link>
+
+<joint name="joint7" type="floating">
+<parent link="base_link"/>
+<child link="link7"/>
+</joint>
+
+</robot>
