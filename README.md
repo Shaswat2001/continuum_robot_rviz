@@ -56,10 +56,10 @@ rosrun continuum_rb cr_model
 
 ```python
 roslaunch continuum_rb rviz.launch
+```
 
 ------
 
-```
 ## Contact
 
 If you have any questions, please let me know:
