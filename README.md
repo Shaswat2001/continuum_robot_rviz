@@ -6,7 +6,7 @@ In the given project, a tendon driven continuum robot is developed by using floa
 
 ### Single Section Robot Demo
 
-<p align="left">
+<p align="center">
 <img src="./assets/rviz_demo.gif" width="600" alt="mulls_slam">
 </p>
 
