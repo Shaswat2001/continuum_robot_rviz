@@ -32,9 +32,11 @@ The ROS workflow used for the project is shown in the below figure -
 
 ## Continuum Robot Model
 
-For the given analysis, a Piecewise Constant curvature method proposed by <a href="https://ieeexplore.ieee.org/document/1588999" target="_blank">I.D. Walker</a>is used. PCC method approximates the continuum robot as a series of substitutions applied to a modified homogenous transformation matrix computed using a D-H-type approach. This formulation also relies on the assumption that the trunk bends with constant curvature, due to the compliance of the trunk.
+For the given analysis, a Piecewise Constant curvature method proposed by <a href="https://ieeexplore.ieee.org/document/1588999" target="_blank">I.D. Walker</a>is used. PCC method approximates the continuum robot as a series of substitutions applied to a modified homogenous transformation matrix computed using a D-H-type approach. This formulation also relies on the assumption that the trunk bends with constant curvature, due to the compliance of the trunk. The rotation matrix calculated using the above process is given by -
 
-
+<p align="center">
+<img src="./assets/Kinematics.png" width="500" alt="flow">
+</p>
 
 ------
 
