@@ -1,5 +1,11 @@
 # RVIZ visualization of a tendon driven continuum robot
 
+
+<p align="left">
+    <a href="http://wiki.ros.org/">
+      <img src="https://img.shields.io/ros/v/noetic/moveit_msgs.svg" /></a>
+</p>
+
 In the given project, a tendon driven continuum robot is developed by using floating joints. The Piecewise constant curvature method is used to model the compliant nature of continuum robot. 
 
 ------
