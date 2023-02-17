@@ -23,6 +23,7 @@ class Continuum
         ros::Publisher cableTopic;
         visualization_msgs::MarkerArray cableMarker;
         double kappa;
+        geometry_msgs::Point position;
         double phi;
         ofstream robotURDFfile;
         tf::Quaternion getDiskRotation(int diskID);
@@ -35,8 +36,9 @@ class Continuum
         double rb_length;
         void setBasePose();
 
-        void setrbShape(double phi,geometry_msgs::Point pt);
+        void setrbShape(double phi);
         void setrbShape(double phi,double kappa);
+        void pose_callback(const geometry_msgs::Point msg);
         void update();
 
         virtual ~Continuum();

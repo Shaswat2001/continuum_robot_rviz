@@ -6,6 +6,11 @@ Continuum::Continuum(int noDisks,double rbLength)
     ros::NodeHandle nh;
     this->no_disks = noDisks;
     this->rb_length = rbLength;
+	// Setting the initial position of the robot
+	this->position.x = 12;
+	this->position.y = 12;
+	this->position.z = 12;
+	
     this->rbTFframe = new tf::Transform[noDisks];
     cableMarker.markers.resize(RESOLUTION);
     cableTopic = nh.advertise<visualization_msgs::MarkerArray>("cable_topic",1);
@@ -62,10 +67,10 @@ void Continuum::initCableMarkers()
 	    cableMarker.markers[r].lifetime = ros::Duration();
 	  }
 }
-void Continuum::setrbShape(double phi,geometry_msgs::Point pt)
+void Continuum::setrbShape(double phi)
 {
-    
-	kappa = 2/rb_length*(atan(-double(pt.x)/double(pt.z)));
+
+	kappa = 2/rb_length*(atan(-double(this->position.x)/double(this->position.z)));
     tf::Matrix3x3 R;
     tf::Quaternion qRot;
 
@@ -151,6 +156,11 @@ void Continuum::update(void)
 cableTopic.publish(cableMarker);
 
 rate.sleep();
+}
+
+void Continuum::pose_callback(const geometry_msgs::Point msg)
+{
+    this->position = msg;
 }
 
 void Continuum::creatURDF(int ndisks,double segLength,double radius)
