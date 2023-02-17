@@ -6,7 +6,7 @@
       <img src="https://img.shields.io/ros/v/noetic/moveit_msgs.svg" /></a>
 </p>
 
-In the given project, a tendon driven continuum robot is developed by using floating joints. The Piecewise constant curvature method is used to model the compliant nature of continuum robot. 
+In the given project, a tendon driven continuum robot is visualized in RViz with the help of floating joints. The Piecewise constant curvature method is used to model the compliant nature of continuum robot. 
 
 ------
 
