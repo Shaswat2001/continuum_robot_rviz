@@ -14,7 +14,6 @@ Continuum::Continuum(int noDisks,double rbLength)
     this->rbTFframe = new tf::Transform[noDisks];
     cableMarker.markers.resize(RESOLUTION);
     cableTopic = nh.advertise<visualization_msgs::MarkerArray>("cable_topic",1);
-    this->kappa = double(noDisks);
     this->phi = double(noDisks);
     this->creatURDF(noDisks,rbLength,0.3);
 }

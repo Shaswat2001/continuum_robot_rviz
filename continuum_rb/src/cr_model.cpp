@@ -19,6 +19,5 @@ int main( int argc, char** argv )
     robot.update();
     ros::spinOnce();
   }
-    // Giving robot position as input
     
 }
