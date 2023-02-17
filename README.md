@@ -48,7 +48,7 @@ For the given analysis, a Piecewise Constant curvature method proposed by <a hre
 
 ## Running the Simulation
 
-to the run the following package in 3 seperate terminals run -
+to the run the following package in 4 seperate terminals run -
 
 ```python
 roscore
@@ -62,6 +62,10 @@ rosrun continuum_rb cr_model
 
 ```python
 roslaunch continuum_rb rviz.launch
+```
+
+```python
+rosrun continuum_rb publishEE
 ```
 
 ------
