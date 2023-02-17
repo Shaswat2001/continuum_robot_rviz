@@ -5,6 +5,7 @@
 #include <ros/package.h>
 #include "tf/transform_broadcaster.h"
 #include <fstream>
+#include <vector>
 #include "visualization_msgs/MarkerArray.h"
 #include <termios.h>
 #include <math.h>
@@ -35,9 +36,8 @@ class Continuum
         int no_disks;
         double rb_length;
         void setBasePose();
-
+        vector<double> arrange(double initial, double final);
         void setrbShape(double phi);
-        void setrbShape(double phi,double kappa);
         void pose_callback(const geometry_msgs::Point msg);
         void update();
 

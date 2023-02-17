@@ -10,7 +10,7 @@ Continuum::Continuum(int noDisks,double rbLength)
 	this->position.x = 12;
 	this->position.y = 12;
 	this->position.z = 12;
-	
+	this->kappa = 2/rb_length*(atan(-double(this->position.x)/double(this->position.z)));
     this->rbTFframe = new tf::Transform[noDisks];
     cableMarker.markers.resize(RESOLUTION);
     cableTopic = nh.advertise<visualization_msgs::MarkerArray>("cable_topic",1);
@@ -70,40 +70,28 @@ void Continuum::initCableMarkers()
 void Continuum::setrbShape(double phi)
 {
 
-	kappa = 2/rb_length*(atan(-double(this->position.x)/double(this->position.z)));
-    tf::Matrix3x3 R;
-    tf::Quaternion qRot;
+	double kappa_initial = this->kappa;
+	double kappa_new = 2/rb_length*(atan(-double(this->position.x)/double(this->position.z)));
+	vector<double> values = this->arrange(kappa_initial,kappa_new);
+	for(int i=0;i<values.size();i++)
+	{
+		this->kappa = values[i];
+		tf::Matrix3x3 R;
+		tf::Quaternion qRot;
 
-    R.setValue(pow(cos(phi),2) * (cos(kappa*rb_length) - 1) + 1, sin(phi)*cos(phi)*( cos(kappa*rb_length) - 1), -cos(phi)*sin(kappa*rb_length),
-						sin(phi)*cos(phi)*( cos(kappa*rb_length) - 1), pow(cos(phi),2) * ( 1 - cos(kappa*rb_length) ) + cos( kappa * rb_length ),  -sin(phi)*sin(kappa*rb_length),
-						 cos(phi)*sin(kappa*rb_length),  sin(phi)*sin(kappa*rb_length), cos(kappa*rb_length));
-    R.getRotation(qRot);
+		R.setValue(pow(cos(phi),2) * (cos(kappa*rb_length) - 1) + 1, sin(phi)*cos(phi)*( cos(kappa*rb_length) - 1), -cos(phi)*sin(kappa*rb_length),
+							sin(phi)*cos(phi)*( cos(kappa*rb_length) - 1), pow(cos(phi),2) * ( 1 - cos(kappa*rb_length) ) + cos( kappa * rb_length ),  -sin(phi)*sin(kappa*rb_length),
+							cos(phi)*sin(kappa*rb_length),  sin(phi)*sin(kappa*rb_length), cos(kappa*rb_length));
+		R.getRotation(qRot);
 
-    EEPose.setRotation(BasePose.getRotation() * qRot);
+		EEPose.setRotation(BasePose.getRotation() * qRot);
 
-    tf::Vector3 eePosition = BasePose.getOrigin() + ( tf::Matrix3x3(BasePose.getRotation())*tf::Vector3(cos(phi)*( cos(kappa*rb_length) - 1)/kappa, sin(phi)*( cos(kappa*rb_length) - 1)/kappa, sin(kappa*rb_length)/kappa));
-    EEPose.setOrigin(eePosition);
+		tf::Vector3 eePosition = BasePose.getOrigin() + ( tf::Matrix3x3(BasePose.getRotation())*tf::Vector3(cos(phi)*( cos(kappa*rb_length) - 1)/kappa, sin(phi)*( cos(kappa*rb_length) - 1)/kappa, sin(kappa*rb_length)/kappa));
+		EEPose.setOrigin(eePosition);
+		this->update();
+		ros::spinOnce();
+	}
 }
-
-void Continuum::setrbShape(double phi,double kappa)
-{
-	this->phi = phi;
-	this->kappa = kappa;
-
-    tf::Matrix3x3 R;
-    tf::Quaternion qRot;
-
-    R.setValue(pow(cos(phi),2) * (cos(kappa*rb_length) - 1) + 1, sin(phi)*cos(phi)*( cos(kappa*rb_length) - 1), -cos(phi)*sin(kappa*rb_length),
-						sin(phi)*cos(phi)*( cos(kappa*rb_length) - 1), pow(cos(phi),2) * ( 1 - cos(kappa*rb_length) ) + cos( kappa * rb_length ),  -sin(phi)*sin(kappa*rb_length),
-						 cos(phi)*sin(kappa*rb_length),  sin(phi)*sin(kappa*rb_length), cos(kappa*rb_length));
-    R.getRotation(qRot);
-
-    EEPose.setRotation(BasePose.getRotation() * qRot);
-
-    tf::Vector3 eePosition = BasePose.getOrigin() + ( tf::Matrix3x3(BasePose.getRotation())*tf::Vector3(cos(phi)*( cos(kappa*rb_length) - 1)/kappa, sin(phi)*( cos(kappa*rb_length) - 1)/kappa, sin(kappa*rb_length)/kappa));
-    EEPose.setOrigin(eePosition);
-}
-
 tf::Quaternion Continuum::getDiskRotation(int diskID)
 {
     tf::Matrix3x3 Rot;
@@ -153,9 +141,9 @@ void Continuum::update(void)
 			cableMarker.markers[i].pose.orientation.w = 1;//slerpQuaternionCable.w();
 
 	}
-cableTopic.publish(cableMarker);
+	cableTopic.publish(cableMarker);
 
-rate.sleep();
+	rate.sleep();
 }
 
 void Continuum::pose_callback(const geometry_msgs::Point msg)
@@ -203,6 +191,23 @@ void Continuum::creatURDF(int ndisks,double segLength,double radius)
 	  }
       robotURDFfile <<"</robot>"<<endl;
       robotURDFfile.close();
+}
+
+vector<double> Continuum::arrange(double initial, double final)
+{
+	vector<double> values_kappa;
+	if(initial < final)
+	{
+		for(double i=initial;i<final;i=i+0.01)
+			values_kappa.push_back(i);
+	}
+	else
+	{
+		for(double i=initial;i<final;i=i-0.01)
+			values_kappa.push_back(i);
+	}
+
+	return values_kappa;
 }
 Continuum::~Continuum() {
 	// TODO Auto-generated destructor stub
