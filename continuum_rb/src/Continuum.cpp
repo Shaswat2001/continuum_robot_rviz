@@ -80,6 +80,25 @@ void Continuum::setrbShape(double phi,geometry_msgs::Point pt)
     EEPose.setOrigin(eePosition);
 }
 
+void Continuum::setrbShape(double phi,double kappa)
+{
+	this->phi = phi;
+	this->kappa = kappa;
+
+    tf::Matrix3x3 R;
+    tf::Quaternion qRot;
+
+    R.setValue(pow(cos(phi),2) * (cos(kappa*rb_length) - 1) + 1, sin(phi)*cos(phi)*( cos(kappa*rb_length) - 1), -cos(phi)*sin(kappa*rb_length),
+						sin(phi)*cos(phi)*( cos(kappa*rb_length) - 1), pow(cos(phi),2) * ( 1 - cos(kappa*rb_length) ) + cos( kappa * rb_length ),  -sin(phi)*sin(kappa*rb_length),
+						 cos(phi)*sin(kappa*rb_length),  sin(phi)*sin(kappa*rb_length), cos(kappa*rb_length));
+    R.getRotation(qRot);
+
+    EEPose.setRotation(BasePose.getRotation() * qRot);
+
+    tf::Vector3 eePosition = BasePose.getOrigin() + ( tf::Matrix3x3(BasePose.getRotation())*tf::Vector3(cos(phi)*( cos(kappa*rb_length) - 1)/kappa, sin(phi)*( cos(kappa*rb_length) - 1)/kappa, sin(kappa*rb_length)/kappa));
+    EEPose.setOrigin(eePosition);
+}
+
 tf::Quaternion Continuum::getDiskRotation(int diskID)
 {
     tf::Matrix3x3 Rot;
@@ -98,7 +117,7 @@ void Continuum::update(void)
     tf::Vector3 eePc;
     char link_name[30];
 
-    for(int i = 1;i<=no_disks;i++)
+    for(int i = 0;i<=no_disks;i++)
     {
         eeP[0]=cos(phi)*(cos(kappa*((i/((double)no_disks))*rb_length)) - 1)/kappa;
         eeP[1]=sin(phi)*(cos(kappa*((i/((double)no_disks))*rb_length)) - 1)/kappa;
@@ -149,7 +168,7 @@ void Continuum::creatURDF(int ndisks,double segLength,double radius)
     robotURDFfile << "</material>"<<endl;
     robotURDFfile<<endl;
 
-    for(int disk=1;disk<=ndisks;disk++)
+    for(int disk=0;disk<=ndisks;disk++)
 	  {
 		  robotURDFfile << "<link name=\"link"<<disk<<"\">"<<endl;
 		  robotURDFfile << "<visual>"<<endl;

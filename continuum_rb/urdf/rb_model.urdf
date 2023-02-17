@@ -6,6 +6,20 @@
 <color rgba="0 1 0 1"/>
 </material>
 
+<link name="link0">
+<visual>
+<geometry>
+<cylinder length="0.1" radius="0.3"/>
+<origin rpy="0 0 0" xyz="0 0 8"/>
+</geometry>
+</visual>
+</link>
+
+<joint name="joint0" type="floating">
+<parent link="base_link"/>
+<child link="link0"/>
+</joint>
+
 <link name="link1">
 <visual>
 <geometry>

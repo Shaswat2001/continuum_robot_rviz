@@ -34,7 +34,9 @@ class Continuum
         int no_disks;
         double rb_length;
         void setBasePose();
+
         void setrbShape(double phi,geometry_msgs::Point pt);
+        void setrbShape(double phi,double kappa);
         void update();
 
         virtual ~Continuum();
