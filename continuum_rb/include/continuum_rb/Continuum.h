@@ -3,6 +3,7 @@
 #define CONTINUUM_RB_INCLUDE_CONTINUUM_H
 #include "ros/ros.h"
 #include <ros/package.h>
+#include "std_msgs/Float64.h"
 #include "tf/transform_broadcaster.h"
 #include <fstream>
 #include <vector>
@@ -24,6 +25,7 @@ class Continuum
         ros::Publisher cableTopic;
         visualization_msgs::MarkerArray cableMarker;
         double kappa;
+        double kappa_initial;
         geometry_msgs::Point position;
         double phi;
         ofstream robotURDFfile;
@@ -38,7 +40,9 @@ class Continuum
         void setBasePose();
         vector<double> arrange(double initial, double final);
         void setrbShape(double phi);
+        void setkpShape(double phi);
         void pose_callback(const geometry_msgs::Point msg);
+        void kappa_callback(const std_msgs::Float64 kp);
         void update();
 
         virtual ~Continuum();

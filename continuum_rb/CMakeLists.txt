@@ -136,6 +136,9 @@ target_link_libraries(cr_model continuum_rb ${catkin_LIBRARIES})
 add_executable(publishEE src/publishEE.cpp)
 target_link_libraries(publishEE continuum_rb ${catkin_LIBRARIES})
 
+add_executable(publishKappa src/publishKappa.cpp)
+target_link_libraries(publishKappa continuum_rb ${catkin_LIBRARIES})
+
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure

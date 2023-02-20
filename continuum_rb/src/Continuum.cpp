@@ -11,6 +11,7 @@ Continuum::Continuum(int noDisks,double rbLength)
 	this->position.y = 12;
 	this->position.z = 12;
 	this->kappa = 2/rb_length*(atan(-double(this->position.x)/double(this->position.z)));
+	this->kappa_initial = this->kappa;
     this->rbTFframe = new tf::Transform[noDisks];
     cableMarker.markers.resize(RESOLUTION);
     cableTopic = nh.advertise<visualization_msgs::MarkerArray>("cable_topic",1);
@@ -91,6 +92,30 @@ void Continuum::setrbShape(double phi)
 		ros::spinOnce();
 	}
 }
+
+void Continuum::setkpShape(double phi)
+{
+	vector<double> values = this->arrange(kappa_initial,this->kappa);
+	for(int i=0;i<values.size();i++)
+	{
+		this->kappa = values[i];
+		tf::Matrix3x3 R;
+		tf::Quaternion qRot;
+
+		R.setValue(pow(cos(phi),2) * (cos(kappa*rb_length) - 1) + 1, sin(phi)*cos(phi)*( cos(kappa*rb_length) - 1), -cos(phi)*sin(kappa*rb_length),
+							sin(phi)*cos(phi)*( cos(kappa*rb_length) - 1), pow(cos(phi),2) * ( 1 - cos(kappa*rb_length) ) + cos( kappa * rb_length ),  -sin(phi)*sin(kappa*rb_length),
+							cos(phi)*sin(kappa*rb_length),  sin(phi)*sin(kappa*rb_length), cos(kappa*rb_length));
+		R.getRotation(qRot);
+
+		EEPose.setRotation(BasePose.getRotation() * qRot);
+
+		tf::Vector3 eePosition = BasePose.getOrigin() + ( tf::Matrix3x3(BasePose.getRotation())*tf::Vector3(cos(phi)*( cos(kappa*rb_length) - 1)/kappa, sin(phi)*( cos(kappa*rb_length) - 1)/kappa, sin(kappa*rb_length)/kappa));
+		EEPose.setOrigin(eePosition);
+		this->update();
+		ros::spinOnce();
+	}
+}
+
 tf::Quaternion Continuum::getDiskRotation(int diskID)
 {
     tf::Matrix3x3 Rot;
@@ -148,6 +173,12 @@ void Continuum::update(void)
 void Continuum::pose_callback(const geometry_msgs::Point msg)
 {
     this->position = msg;
+}
+
+void Continuum::kappa_callback(const std_msgs::Float64 kappa)
+{	
+	this->kappa_initial = this->kappa;
+    this->kappa = kappa.data;
 }
 
 void Continuum::creatURDF(int ndisks,double segLength,double radius)
